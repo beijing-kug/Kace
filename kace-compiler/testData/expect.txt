@@ -17,10 +17,10 @@ class SixthActivity
 7
 // FILE: Main.kt.ir
 class MainActivity : AndroidExtensions {
+    private val $$delegate_0: AndroidExtensionsImpl = AndroidExtensionsImpl()
     override fun <T: View?> findViewByIdCached(owner: AndroidExtensionsBase, id: Int, viewClass: Class<T>): T? {
         return <this>.$$delegate_0.findViewByIdCached(owner, id, viewClass)
     }
-    private val $$delegate_0: AndroidExtensionsImpl = AndroidExtensionsImpl()
 }
 class SecondActivity : AndroidExtensions {
     private var $$androidExtensionsImpl: AndroidExtensionsImpl = AndroidExtensionsImpl()

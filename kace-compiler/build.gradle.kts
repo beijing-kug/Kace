@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -35,15 +36,14 @@ dependencies {
     testImplementation(kotlin("test-junit"))
     testImplementation("org.jetbrains.kotlin:kotlin-compiler-embeddable")
 
-    testImplementation("com.bennyhuo.kotlin:kotlin-compile-testing-extensions:1.9.20-1.3.0")
+    testImplementation("com.bennyhuo.kotlin:kotlin-compile-testing-extensions:2.0.0-1.3.0")
 }
 
 val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions.freeCompilerArgs += listOf(
-    "-opt-in=kotlin.RequiresOptIn",
-    "-Xcontext-receivers"
-)
-compileKotlin.kotlinOptions.jvmTarget = "1.8"
+compileKotlin.compilerOptions {
+    freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
+    jvmTarget.set(JvmTarget.JVM_1_8)
+}
 
 buildConfig {
     packageName("$group")

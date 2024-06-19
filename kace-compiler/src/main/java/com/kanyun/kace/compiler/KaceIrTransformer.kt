@@ -42,7 +42,6 @@ import org.jetbrains.kotlin.ir.builders.irGetField
 import org.jetbrains.kotlin.ir.builders.irReturn
 import org.jetbrains.kotlin.ir.declarations.IrClass
 import org.jetbrains.kotlin.ir.types.defaultType
-import org.jetbrains.kotlin.ir.types.impl.IrUninitializedType
 import org.jetbrains.kotlin.ir.types.makeNullable
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
 import org.jetbrains.kotlin.ir.util.constructors
@@ -78,8 +77,7 @@ class KaceIrTransformer(private val context: IrPluginContext) : IrElementTransfo
                 // override fun <T> findViewByIdCached(owner, id) = ...
                 declaration.addOverride(
                     ANDROID_EXTENSIONS_FQNAME,
-                    FIND_VIEW_BY_ID_CACHED_NAME,
-                    IrUninitializedType,
+                    FIND_VIEW_BY_ID_CACHED_NAME
                 ).apply {
                     val parameterT = addTypeParameter("T", context.typeOfView())
                     returnType = parameterT.defaultType.makeNullable()

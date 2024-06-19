@@ -17,9 +17,12 @@
 package com.kanyun.kace.compiler.utils
 
 import org.jetbrains.kotlin.backend.jvm.ir.erasedUpperBound
+import org.jetbrains.kotlin.descriptors.DescriptorVisibilities
 import org.jetbrains.kotlin.descriptors.Modality
+import org.jetbrains.kotlin.ir.UNDEFINED_OFFSET
 import org.jetbrains.kotlin.ir.builders.declarations.addFunction
 import org.jetbrains.kotlin.ir.declarations.IrClass
+import org.jetbrains.kotlin.ir.declarations.IrDeclarationOrigin
 import org.jetbrains.kotlin.ir.declarations.IrFunction
 import org.jetbrains.kotlin.ir.declarations.IrSimpleFunction
 import org.jetbrains.kotlin.ir.expressions.IrExpression
@@ -27,10 +30,13 @@ import org.jetbrains.kotlin.ir.expressions.impl.IrGetValueImpl
 import org.jetbrains.kotlin.ir.types.IrType
 import org.jetbrains.kotlin.ir.types.classOrNull
 import org.jetbrains.kotlin.ir.util.allOverridden
+import org.jetbrains.kotlin.ir.util.copyTo
 import org.jetbrains.kotlin.ir.util.fqNameWhenAvailable
 import org.jetbrains.kotlin.ir.util.functions
+import org.jetbrains.kotlin.ir.util.parentAsClass
 import org.jetbrains.kotlin.ir.util.parentClassOrNull
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.Name
 
 fun IrClass.isSubclassOfFqName(fqName: String): Boolean =
     fqNameWhenAvailable?.asString() == fqName || superTypes.any {
@@ -42,9 +48,21 @@ fun IrClass.isSubclassOfFqName(fqName: String): Boolean =
 fun IrClass.addOverride(
     baseFqName: FqName,
     name: String,
-    returnType: IrType,
     modality: Modality = Modality.FINAL,
-): IrSimpleFunction = addFunction(name, returnType, modality).apply {
+): IrSimpleFunction = addFunction {
+    this.name = Name.identifier(name)
+    this.modality = modality
+    this.startOffset = UNDEFINED_OFFSET
+    this.endOffset = UNDEFINED_OFFSET
+    this.visibility = DescriptorVisibilities.PUBLIC
+    this.isFakeOverride = false
+    this.isSuspend = false
+    this.isInline = false
+    this.origin = IrDeclarationOrigin.DEFINED
+}.apply {
+    val thisReceiver = parentAsClass.thisReceiver!!
+    dispatchReceiverParameter = thisReceiver.copyTo(this, type = thisReceiver.type)
+
     overriddenSymbols = superTypes.mapNotNull { superType ->
         superType.classOrNull?.owner?.takeIf { superClass ->
             superClass.isSubclassOfFqName(
