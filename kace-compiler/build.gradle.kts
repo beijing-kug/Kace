@@ -25,18 +25,20 @@ plugins {
     `maven-publish`
 }
 
+// Build this project with Kotlin 2.0.0 for compatibility reason.
+// But we should depend on libs for Kotlin 2.1.0.
+val kotlinVersion = "2.1.0"
+
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
-    implementation(kotlin("reflect"))
-    implementation(kotlin("compiler-embeddable"))
+    implementation(kotlin("stdlib-jdk8", kotlinVersion))
+    implementation(kotlin("reflect", kotlinVersion))
+    implementation(kotlin("compiler-embeddable", kotlinVersion))
 
     kapt("com.google.auto.service:auto-service:1.0.1")
     compileOnly("com.google.auto.service:auto-service-annotations:1.0.1")
 
     testImplementation(kotlin("test-junit"))
-    testImplementation("org.jetbrains.kotlin:kotlin-compiler-embeddable")
-
-    testImplementation("com.bennyhuo.kotlin:kotlin-compile-testing-extensions:2.0.0-1.3.0")
+    testImplementation("com.bennyhuo.kotlin:kotlin-compile-testing-extensions:2.1.0-1.3.0")
 }
 
 val compileKotlin: KotlinCompile by tasks
