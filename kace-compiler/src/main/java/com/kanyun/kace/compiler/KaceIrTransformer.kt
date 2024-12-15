@@ -77,7 +77,7 @@ class KaceIrTransformer(private val context: IrPluginContext) : IrElementTransfo
                 // override fun <T> findViewByIdCached(owner, id) = ...
                 declaration.addOverride(
                     ANDROID_EXTENSIONS_FQNAME,
-                    FIND_VIEW_BY_ID_CACHED_NAME
+                    FIND_VIEW_BY_ID_CACHED_NAME,
                 ).apply {
                     val parameterT = addTypeParameter("T", context.typeOfView())
                     returnType = parameterT.defaultType.makeNullable()

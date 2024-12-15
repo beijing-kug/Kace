@@ -49,7 +49,7 @@ class KaceFirSupertypeGenerationExtension(
     override fun computeAdditionalSupertypes(
         classLikeDeclaration: FirClassLikeDeclaration,
         resolvedSupertypes: List<FirResolvedTypeRef>,
-        typeResolver: TypeResolveService
+        typeResolver: TypeResolveService,
     ): List<FirResolvedTypeRef> {
         var shouldAddSuperType = false
         OUTER@ for (superTypeRef in resolvedSupertypes) {
