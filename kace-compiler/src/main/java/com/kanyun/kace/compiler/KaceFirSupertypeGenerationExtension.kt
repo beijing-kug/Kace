@@ -70,7 +70,7 @@ class KaceFirSupertypeGenerationExtension(
             ANDROID_EXTENSIONS_CLASS_ID.constructClassLikeType(
                 emptyArray(),
                 isMarkedNullable = false,
-            )
+            ),
         )
     }
 
