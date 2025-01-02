@@ -22,12 +22,10 @@ plugins {
 }
 
 dependencies {
-    implementation(kotlin("gradle-plugin"))
-    implementation(kotlin("stdlib-jdk8"))
+    compileOnly(kotlin("gradle-plugin"))
+    compileOnly(kotlin("stdlib-jdk8"))
 
-    compileOnly("com.android.tools.build:gradle:4.2.2")
-    compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.0")
-    implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable")
+    compileOnly("com.android.tools.build:gradle:7.3.1")
 }
 
 buildConfig {

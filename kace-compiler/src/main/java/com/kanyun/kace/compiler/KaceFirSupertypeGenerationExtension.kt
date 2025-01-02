@@ -31,11 +31,9 @@ import org.jetbrains.kotlin.fir.symbols.SymbolInternals
 import org.jetbrains.kotlin.fir.types.ConeClassLikeType
 import org.jetbrains.kotlin.fir.types.ConeKotlinType
 import org.jetbrains.kotlin.fir.types.FirResolvedTypeRef
-import org.jetbrains.kotlin.fir.types.builder.buildResolvedTypeRef
 import org.jetbrains.kotlin.fir.types.classId
 import org.jetbrains.kotlin.fir.types.coneTypeSafe
 import org.jetbrains.kotlin.fir.types.constructClassLikeType
-import org.jetbrains.kotlin.fir.types.toSymbol
 import org.jetbrains.kotlin.name.ClassId
 
 /**
@@ -50,10 +48,10 @@ class KaceFirSupertypeGenerationExtension(
         classLikeDeclaration: FirClassLikeDeclaration,
         resolvedSupertypes: List<FirResolvedTypeRef>,
         typeResolver: TypeResolveService,
-    ): List<FirResolvedTypeRef> {
+    ): List<ConeKotlinType> {
         var shouldAddSuperType = false
         OUTER@ for (superTypeRef in resolvedSupertypes) {
-            val superType = superTypeRef.type
+            val superType = superTypeRef.coneType
             val classIds = listOf(superType.classId) + superType.allSuperTypeClassIds()
             for (classId in classIds) {
                 if (classId == ANDROID_EXTENSIONS_CLASS_ID) {
@@ -69,12 +67,10 @@ class KaceFirSupertypeGenerationExtension(
         if (!shouldAddSuperType) return emptyList()
 
         return listOf(
-            buildResolvedTypeRef {
-                type = ANDROID_EXTENSIONS_CLASS_ID.constructClassLikeType(
-                    emptyArray(),
-                    isNullable = false,
-                )
-            },
+            ANDROID_EXTENSIONS_CLASS_ID.constructClassLikeType(
+                emptyArray(),
+                isMarkedNullable = false,
+            ),
         )
     }
 
